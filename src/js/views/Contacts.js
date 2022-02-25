@@ -21,13 +21,15 @@ export const Contacts = () => {
 					<ul className="list-group pull-down" id="contact-list">
 						{store.Mycontacts.map((item, index) => {
 							return (
-								<ContactCard onDelete={() => setState({ showModal: true })} data={item} key={index} />
+								<div key={index}>
+									<ContactCard onDelete={() => setState({ showModal: true })} data={item} />
+								</div>
 							);
 						})}
 					</ul>
 				</div>
+				<Modal show={state.showModal} onClose={() => setState({ showModal: false })} />
 			</div>
-			<Modal show={state.showModal} onClose={() => setState({ showModal: false })} />
 		</div>
 	);
 };

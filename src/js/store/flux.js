@@ -2,7 +2,8 @@ const getState = ({ getStore, setStore }) => {
 	return {
 		store: {
 			//Your data structures, A.K.A Entities
-			Mycontacts: []
+			Mycontacts: [],
+			deleteId: null
 		},
 		actions: {
 			//(Arrow) Functions that update the Store
@@ -16,6 +17,9 @@ const getState = ({ getStore, setStore }) => {
 						setStore({ Mycontacts: data });
 					})
 					.catch(error => console.log("Looks like there was a problem: \n", error));
+			},
+			setDeleteId: id => {
+				setStore({ deleteId: id });
 			}
 		}
 	};

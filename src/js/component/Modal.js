@@ -1,11 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { withRouter } from "react-router-dom";
+import React, { useState, useContext } from "react";
+
 import PropTypes from "prop-types";
+import { Context } from "../store/appContext";
+import propTypes from "prop-types";
 
 export const Modal = props => {
+	const { store, actions } = useContext(Context);
 	const [state, setState] = useState({
 		//initialize state here
 	});
+	const getDelete = id => {
+		fetch(`https://assets.breatheco.de/apis/fake/contact/${id}`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json"
+			}
+		})
+			.then(res => {
+				if (!res.ok) throw Error(res.statusText);
+				actions.getData();
+				return res.json();
+			})
+			.then(response => console.log("Success:", response))
+			.catch(error => console.error(error));
+	};
+
 	return (
 		<div className="modal" tabIndex="-1" role="dialog" style={{ display: props.show ? "inline-block" : "none" }}>
 			<div className="modal-dialog" role="document">
@@ -30,10 +49,17 @@ export const Modal = props => {
 					</div>
 					<div className="modal-footer">
 						<button onClick={() => props.onClose()} type="button" className="btn btn-primary">
-							Oh no!
+							Cancel
 						</button>
-						<button type="button" className="btn btn-secondary" data-dismiss="modal">
-							Do it!
+						<button
+							onClick={() => {
+								getDelete(store.deleteId);
+								props.onClose();
+							}}
+							type="button"
+							className="btn btn-secondary"
+							data-dismiss="modal">
+							Confirm
 						</button>
 					</div>
 				</div>
@@ -46,7 +72,8 @@ export const Modal = props => {
  * your component's properties
  **/
 Modal.propTypes = {
-	history: PropTypes.object,
+	data: PropTypes.object,
+	index: PropTypes.number,
 	onClose: PropTypes.func,
 	show: PropTypes.bool
 };
